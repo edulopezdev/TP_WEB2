@@ -1,3 +1,4 @@
+const translate = require("node-google-translate-skidz");
 const express = require("express");
 const path = require("path");
 const app = express();
@@ -65,61 +66,113 @@ app.post("/", async (req, res) => {
   }
 });
 
+// ====================== Función de traducción ======================
+async function traduccion(objetos) {
+  for (const element of objetos) {
+    const promises = [];
+
+    // Traducción del título
+    if (element.title) {
+      let texto = element.title;
+      promises.push(
+        translate({
+          text: texto,
+          source: "en",
+          target: "es",
+        }).then((result) => {
+          element.title = result.translation;
+        })
+      );
+    }
+
+    // Traducción de la dinastía
+    if (element.dynasty) {
+      let texto = element.dynasty;
+      promises.push(
+        translate({
+          text: texto,
+          source: "en",
+          target: "es",
+        }).then((result) => {
+          element.dynasty = result.translation;
+        })
+      );
+    }
+
+    // Traducción de la cultura
+    if (element.culture) {
+      let texto = element.culture;
+      promises.push(
+        translate({
+          text: texto,
+          source: "en",
+          target: "es",
+        }).then((result) => {
+          element.culture = result.translation;
+        })
+      );
+    }
+
+    // Espera todas las traducciones
+    await Promise.all(promises);
+  }
+}
+
 // ====================== Función para traer IDs ======================
 async function traerIds(url) {
-    console.log("URL a la API:", url);
-    let idObj = []; // Inicializa como un arreglo vacío
-  
-    try {
-      let respuesta = await fetch(url);
-      console.log('Respuesta:', respuesta);
-  
-      if (respuesta.ok) {
-        let datos = await respuesta.json();
-        idObj = datos.objectIDs || []; // Asegúrate de que sea un arreglo
-      } else {
-        console.error('Error en la respuesta:', respuesta.status, respuesta.statusText);
-        throw new Error('Error en la API');
-      }
-    } catch (error) {
-      console.error('Error al traer IDs:', error);
-      // Retorna un arreglo vacío en caso de error
+  console.log("URL a la API:", url);
+  let idObj = []; // Inicializa como un arreglo vacío
+
+  try {
+    let respuesta = await fetch(url);
+    console.log('Respuesta:', respuesta);
+
+    if (respuesta.ok) {
+      let datos = await respuesta.json();
+      idObj = datos.objectIDs || []; // Asegúrate de que sea un arreglo
+    } else {
+      console.error('Error en la respuesta:', respuesta.status, respuesta.statusText);
+      throw new Error('Error en la API');
     }
-  
-    return idObj; // Siempre devuelve un arreglo
+  } catch (error) {
+    console.error('Error al traer IDs:', error);
+    // Retorna un arreglo vacío en caso de error
   }
-  
-  // ====================== Maneja promesas en paralelo ======================
-  async function objetosPromise(ids) {
-    if (ids.length > 0) {
-      let promesas = ids.map(async (id) => {
-        try {
-          let respuesta = await fetch(
-            `https://collectionapi.metmuseum.org/public/collection/v1/objects/${id}`
-          );
-          if (!respuesta.ok) {
-            return null;
-          }
-  
-          let object = await respuesta.json();
-          return object;
-        } catch (error) {
-          console.error('Error al obtener objeto:', error);
+
+  return idObj; // Siempre devuelve un arreglo
+}
+
+// ====================== Maneja promesas en paralelo ======================
+async function objetosPromise(ids) {
+  if (ids.length > 0) {
+    let promesas = ids.map(async (id) => {
+      try {
+        let respuesta = await fetch(
+          `https://collectionapi.metmuseum.org/public/collection/v1/objects/${id}`
+        );
+        if (!respuesta.ok) {
           return null;
         }
-      });
-  
-      let resultados = await Promise.all(promesas);
-      let objetos = resultados.filter((resultado) => resultado !== null);
-      console.log('Resultados:', objetos); // Verifica aquí
-      return objetos;
-    } else {
-      console.log("No se encontró ningún elemento");
-      return []; // Retorna un array vacío si no hay IDs
-    }
+
+        let object = await respuesta.json();
+        return object;
+      } catch (error) {
+        console.error('Error al obtener objeto:', error);
+        return null;
+      }
+    });
+
+    let resultados = await Promise.all(promesas);
+    let objetos = resultados.filter((resultado) => resultado !== null);
+    console.log('Resultados:', objetos); // Verifica aquí
+    return objetos;
+  } else {
+    console.log("No se encontró ningún elemento");
+    return []; // Retorna un array vacío si no hay IDs
   }
-  
-  // ====================== Iniciar el servidor ======================
-  app.listen(PORT, () => {
-    console.log(`Servidor escuchando en http://localhost:${PORT}`);
-  });
+}
+
+// ====================== Iniciar el servidor ======================
+app.listen(PORT, () => {
+  console.log(`Servidor escuchando en http://localhost:${PORT}`);
+});
