@@ -1,0 +1,54 @@
+doctype html
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Museo Metropolitano de NY
+    link(rel="stylesheet", href="../css/styles.css") 
+  body
+    header.fijo
+      h1 Galería de Arte del Museo Metropolitano de NY
+      .filtros-contenedor
+        .filtros
+          input(type="text", id="search", placeholder="Buscar por palabra clave")
+          select(id="department", class="departamentos")
+          select(id="location", class="localizaciones")
+            option(value="", selected) Ninguna opción
+            option(value="China") China
+            option(value="Mexico") México
+            option(value="Guatemala") Guatemala
+            option(value="England") Inglaterra
+            option(value="Belgium") Bélgica
+            option(value="Spain") España
+            option(value="Canada") Canadá
+            option(value="France") Francia
+            option(value="Italy") Italia
+            option(value="Germany") Alemania
+            option(value="Japan") Japón
+            option(value="Venezuela") Venezuela
+            option(value="Netherlands") Países bajos
+            option(value="Denmark") Dinamarca
+            option(value="Czech Republic") República Checa
+          button(class="btn", id="buscar", onclick="buscar()") Buscar
+
+    // Loader
+    div.loader
+      // Este div será el contenedor del spinner
+      .loader
+
+    // Navegación
+    div.navegacion
+      button(id="btnAnterior", style="display: none", onclick="buscarAnterior()") Anterior
+      button(id="btnSiguiente", style="display: none", onclick="buscarSiguiente()") Siguiente
+
+    main(id="gallery")
+      each objeto in objetos
+        .carta
+          img(src=objeto.image || 'default.jpg', alt=objeto.title)
+          .carta-info
+            .carta-title= objeto.title
+            p= objeto.dynasty
+            p= objeto.culture
+            button.ver-imagenes-btn Ver imágenes extras
+
+    script(src="../js/script.js")
