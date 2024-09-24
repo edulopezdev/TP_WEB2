@@ -1,0 +1,19 @@
+{
+  "name": "TP_WEB2",
+  "version": "1.0.0",
+  "description": "Proyecto final de web II - Prof. Fernando Daniel Saez Bonilla",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "node-google-translate-skidz": "^1.1.2",
+    "nodemon": "^3.1.7",
+    "pug": "^3.0.3"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
