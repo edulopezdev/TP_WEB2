@@ -6,8 +6,10 @@ html(lang="es")
     title Museo Metropolitano de NY
     link(rel="stylesheet", href="../css/styles.css")
     link(href="https://fonts.googleapis.com/css2?family=Metamorphous&display=swap", rel="stylesheet")
+    link(rel="stylesheet", href="https://unpkg.com/sweetalert/dist/sweetalert.css")
+    script(src="https://unpkg.com/sweetalert/dist/sweetalert.min.js")
 
-
+  
   body
     header.fijo
       h1 ¡Bienvenidos al museo met de NY!
@@ -45,7 +47,6 @@ html(lang="es")
               option(value="Denmark") Dinamarca
               option(value="Netherlands") Países bajos
 
-          
           button(class="btn", id="buscar", onclick="buscar()") Buscar
 
     // Loader
@@ -68,6 +69,6 @@ html(lang="es")
             .carta-title= objeto.title
             p= objeto.dynasty
             p= objeto.culture
-            button.ver-imagenes-btn Ver imágenes extras
+            button.ver-imagenes-btn + imágenes
 
     script(src="../js/script.js")

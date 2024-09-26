@@ -3,33 +3,16 @@ html(lang="es")
   head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title Detalles de la Obra
+    title Imágenes Adicionales
     link(rel="stylesheet", href="/css/imagenExtra.css")
   body
     header
-      h1 Detalles de la Obra
-      h2= objeto.title || 'Sin título'
-    
-    // Contenedor para centrar imagen y información
-    .container-imagen-extra
-      if objeto.primaryImageSmall
-        img(src=objeto.primaryImageSmall, alt=objeto.title, class="imagen-extra")
-      else
-        img(src="/images/sin_imagen.png", alt="Sin imagen disponible", class="imagen-extra")
+      h1 Imágenes Adicionales
       
-      p
-        strong Dinastía: 
-        = objeto.dynasty || 'No disponible'
-      p
-        strong Cultura: 
-        = objeto.culture || 'No disponible'
-      p
-        strong Fecha de creación: 
-        = objeto.objectDate || 'No disponible'
-      
-    // Más información o imágenes adicionales
+    // Contenedor para mostrar solo las imágenes adicionales
     if objeto.additionalImages && objeto.additionalImages.length > 0
-      h3 Imágenes Adicionales
       .container-imagenes
         each image in objeto.additionalImages
           img(src=image, alt='Imagen adicional', class="imagen-extra")
+    else
+      p No hay imágenes adicionales disponibles.

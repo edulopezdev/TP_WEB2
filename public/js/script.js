@@ -13,10 +13,22 @@ const selectDepartamentos = async () => {
             document.getElementById("department").innerHTML = deptos;
         } else {
             console.log("Error general: " + respuesta.status);
+            mostrarAlerta("Error", "No se pudieron cargar los departamentos. Código de error: " + respuesta.status, "error");
         }
     } catch (error) {
-        console.log(error);
+        console.error("Error al obtener departamentos:", error);
+        mostrarAlerta("Error", "La API se encuentra caída. Por favor, inténtalo de nuevo más tarde.", "error");
     }
+};
+
+// Función para mostrar la alerta
+const mostrarAlerta = (titulo, texto, icono) => {
+    swal({
+        title: titulo,
+        text: texto,
+        icon: icono,
+        buttons: false,
+    });
 };
 
 selectDepartamentos();
@@ -62,7 +74,7 @@ function filtro() {
 
 // ====================== Función para validar objetos ======================
 function esObjetoValido(objeto) {
-    return objeto.primaryImageSmall !== ""; // Solo verifica si hay una imagen
+    return objeto.primaryImageSmall !== ""; 
 }
 
 // ====================== Función para buscar y mostrar resultados ======================
@@ -70,25 +82,25 @@ function esObjetoValido(objeto) {
 // Función para hacer vibrar los filtros
 function vibrarFiltros(filtros) {
     filtros.forEach(filtro => {
-        filtro.classList.add("vibrar"); // Clase que aplica la animación de vibrar
+        filtro.classList.add("vibrar"); 
         setTimeout(() => {
-            filtro.classList.remove("vibrar"); // Elimina la clase después de 1 segundo
+            filtro.classList.remove("vibrar"); 
         }, 1000);
     });
 }
 async function buscar(paginaActual = 1) {
 
-    //controla que haya seleccionado al menos un filtro
+    //controlo que haya seleccionado al menos un filtro
     const departamentoSelect = document.getElementById("department");
     const localizacionSelect = document.getElementById("location");
     const busquedaInput = document.getElementById("search");
 
-    // Remover clases de error antes de validar
+    //aca remuevo clases de error antes de validar
     departamentoSelect.classList.remove("error", "red-bg");
     localizacionSelect.classList.remove("error", "red-bg");
     busquedaInput.classList.remove("error", "red-bg");
 
-    // Valido si hay al menos un filtro seleccionado
+    //vamos a validar si hay al menos un filtro seleccionado
     const ningunoSeleccionado = 
         (deptosSeleccion === "99" || !deptosSeleccion) &&
         !localSeleccion &&
@@ -97,11 +109,11 @@ async function buscar(paginaActual = 1) {
     //Si no hay filtros seleccionados, hacer vibrar todos los filtros
     if (ningunoSeleccionado) {
         vibrarFiltros([departamentoSelect, localizacionSelect, busquedaInput]);
-        swal("Error", "Por favor, selecciona al menos un filtro.", "error");
+        swal("Aviso", "Por favor, selecciona al menos un filtro.", "warning");
         return;
-    }
+    }    
   document.querySelector(".loader").style.display = "flex";
-  let url = filtro(); //Obtengo la URL filtrada
+  let url = filtro();
 
   try {
       const respuesta = await fetch("/", {
@@ -111,52 +123,51 @@ async function buscar(paginaActual = 1) {
       });
       
       const datos = await respuesta.json();
-      document.querySelector(".loader").style.display = "none"; // Oculto el loader
-
+      document.querySelector(".loader").style.display = "none"; 
       const galeria = document.getElementById("gallery");
-      galeria.innerHTML = ""; // Limpio resultados anteriores
+      galeria.innerHTML = ""; 
 
-      // Muestro un mensaje si no hay resultados
+      //ahora muestro un mensaje si no hay resultados
       if (datos.length === 0) {
-          const mensaje = document.createElement("p");
-          mensaje.textContent = "No se encontraron resultados.";
-          galeria.appendChild(mensaje);
-          btnPaginacion(0); // Oculto botones si no hay resultados
-          return;
-      }
+
+        const mensaje = document.createElement("p");
+        mensaje.textContent = "No se encontraron resultados.";
+        mensaje.classList.add("no-resultados");
+        galeria.innerHTML = ""; 
+        galeria.appendChild(mensaje);
+
+        //ahora reinicio los filtros
+        const departamentoSelect = document.getElementById("department");
+        const localizacionSelect = document.getElementById("location");
+        const busquedaInput = document.getElementById("search");
+        
+        departamentoSelect.selectedIndex = 0;
+        localizacionSelect.selectedIndex = 0;
+        busquedaInput.value = "";
+        
+        btnPaginacion(0);
+        document.getElementById('btnAnterior').style.display = "none";
+        document.getElementById('btnSiguiente').style.display = "none";
+        return;
+    }
 
       listaObjetos = datos; 
-      console.log("Total de objetos encontrados:", listaObjetos.length); 
 
       const objetosValidos = listaObjetos.filter(esObjetoValido);
-      
-      console.log("Total de objetos válidos:", objetosValidos.length);
-      
-      const totalResultados = objetosValidos.length; // Total de resultados válidos
-      const totalPaginas = Math.ceil(totalResultados / resultadosPorPagina); // Total de páginas
-      
-      console.log("Total de páginas calculadas:", totalPaginas); 
-
-      // Determino el slice con base en la página actual
+      const totalResultados = objetosValidos.length;
+      const totalPaginas = Math.ceil(totalResultados / resultadosPorPagina);
       const inicioSlice = (paginaActual - 1) * resultadosPorPagina;
-
-      // Asegúrate de que no excedas el número total de objetos
       const slicedDatos = objetosValidos.slice(inicioSlice, inicioSlice + resultadosPorPagina);
 
-      console.log("Objetos a mostrar en esta página:", slicedDatos.length); 
-
-      //Verifico si hay suficientes objetos válidos para mostrar
       if (slicedDatos.length === 0) {
           const mensaje = document.createElement("p");
           mensaje.textContent = "No hay suficientes objetos válidos para mostrar.";
           galeria.appendChild(mensaje);
           return;
       }
-
-      //Creo tarjetas para cada resultado válido
+      
       slicedDatos.forEach(element => crearCards(element));
 
-      //acá actualiza el texto de paginación
       const paginaTexto = document.getElementById('paginaTexto');
       paginaTexto.innerText = `Página ${paginaActual} de ${totalPaginas}`;
       paginaTexto.style.display = totalPaginas > 0 ? "block" : "none"; 
@@ -188,28 +199,26 @@ function crearCards(objeto) {
     let infoContainer = document.createElement("div");
     infoContainer.classList.add("info-container");
 
+    //titulo
     let titulo = document.createElement("h3");
-    titulo.innerText = objeto.title || "Título no disponible";
-    
+    titulo.innerText = objeto.title || "Título: No disponible";    
     infoContainer.appendChild(titulo);
 
-    let dinastia = document.createElement("h4");
-    dinastia.innerText =
-      objeto.dynasty ? `Dinastía: ${objeto.dynasty}` : "Dinastía no disponible";
-    
-    infoContainer.appendChild(dinastia);
-
-    let cultura = document.createElement("h4");
-    cultura.innerText =
-      objeto.culture ? `Cultura: ${objeto.culture}` : "Cultura no disponible";
-    
+    //cultura
+    let cultura = document.createElement("h4");    cultura.innerText =
+      objeto.culture ? `Cultura: ${objeto.culture}` : "Cultura: No disponible";    
     infoContainer.appendChild(cultura);
+
+    //dinastia
+    let dinastia = document.createElement("h4");    dinastia.innerText =
+      objeto.dynasty ? `Dinastía: ${objeto.dynasty}` : "Dinastía: No disponible";    
+    infoContainer.appendChild(dinastia);
 
     carta.appendChild(infoContainer);
 
    if (objeto.additionalImages && objeto.additionalImages.length > 0) {
       let boton = document.createElement("button");
-      boton.innerHTML = "Ver imágenes extras";
+      boton.innerHTML = "+ imágenes";
       boton.classList.add("ver-imagenes-btn");
       boton.onclick = () =>
           window.open(`imagenExtra?objectId=${objeto.objectID}`, "_blank");
@@ -226,29 +235,33 @@ function crearCards(objeto) {
 
 // ====================== Función para paginar ======================
 const btnPaginacion = (paginaActual, totalPaginas) => {
-  const btnAnterior = document.getElementById('btnAnterior');
-  const btnSiguiente = document.getElementById('btnSiguiente');
-
-  btnAnterior.style.display =
-      paginaActual === 1 ? "none" : "block"; 
-
-  btnSiguiente.style.display =
-      listaObjetos.slice((paginaActual - 1) * resultadosPorPagina, paginaActual * resultadosPorPagina).length === resultadosPorPagina &&
-      paginaActual < totalPaginas ? "block" : "none"; 
-
-  btnAnterior.onclick = () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' }); 
-      buscar(paginaActual - 1); //
-  };
-
-  btnSiguiente.onclick = () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' }); 
-      buscar(paginaActual + 1); 
+    const btnAnterior = document.getElementById('btnAnterior');
+    const btnSiguiente = document.getElementById('btnSiguiente');
+    const paginaTexto = document.getElementById('paginaTexto');
+  
+    
+    btnAnterior.style.display = (paginaActual === 1 || totalPaginas === 0) ? "none" : "block";
+  
+    
+    btnSiguiente.style.display = 
+        listaObjetos.slice((paginaActual - 1) * resultadosPorPagina, paginaActual * resultadosPorPagina).length === resultadosPorPagina &&
+        paginaActual < totalPaginas ? "block" : "none"; 
+  
+    
+    btnAnterior.onclick = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        buscar(paginaActual - 1);
+    };
+  
+    
+    btnSiguiente.onclick = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        buscar(paginaActual + 1);
+    };
+  
+    
+    paginaTexto.innerText = totalPaginas > 0 ? `Página ${paginaActual} de ${totalPaginas}` : "";
   };
   
-  
-  const paginaTexto = document.getElementById('paginaTexto');
-  paginaTexto.innerText = `Página ${paginaActual} de ${totalPaginas}`;
-};
 
 document.addEventListener('DOMContentLoaded', selectDepartamentos);

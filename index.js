@@ -1,7 +1,7 @@
 const translate = require("node-google-translate-skidz");
 const express = require("express");
 const path = require("path");
-const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+const fetch = require("node-fetch");
 const app = express();
 const PORT = 3000;
 
@@ -46,20 +46,17 @@ app.get("/imagenExtra", async (req, res) => {
 app.post("/", async (req, res) => {
   try {
     let url = req.body.url;
-    console.log("URL recibida para la búsqueda:", url); 
 
     let ids = await traerIds(url);
-    ids = ids.slice(0, Math.min(ids.length, 250)); //cantidad limite de ids
+    ids = ids.slice(0, Math.min(ids.length, 200));
 
     let objetos = await objetosPromise(ids);
     
-    // Traduce los objetos en paralelo
     await Promise.all(objetos.map(async (objeto) => {
       await traduccion(objeto);
     }));
 
-    // Verifica si hay resultados
-    res.json(objetos.length === 0 ? [] : objetos); //Devuelvo un arreglo vacío si no hay resultados
+    res.json(objetos.length === 0 ? [] : objetos); 
   } catch (error) {
     console.log('Error: ', error);
     res.status(500).send('Error interno del servidor');
@@ -93,7 +90,6 @@ async function translateText(text) {
 
 // ====================== Función para traer IDs ======================
 async function traerIds(url) {
-  console.log("URL a la API:", url);
   try {
     let respuesta = await fetch(url);
     
