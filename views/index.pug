@@ -7,13 +7,14 @@ html(lang="es")
     link(rel="stylesheet", href="../css/styles.css")
     link(href="https://fonts.googleapis.com/css2?family=Metamorphous&display=swap", rel="stylesheet")
     link(rel="stylesheet", href="https://unpkg.com/sweetalert/dist/sweetalert.css")
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css")
     link(rel="icon" href="/images/favicon.ico")
     script(src="https://unpkg.com/sweetalert/dist/sweetalert.min.js")
 
-  
   body
     header.fijo
       h1 ¡Bienvenidos al museo met de NY!
+
       .filtros-contenedor
         .filtros
           // Contenedor para el campo de búsqueda
@@ -71,5 +72,15 @@ html(lang="es")
             p= objeto.dynasty
             p= objeto.culture
             button.ver-imagenes-btn + imágenes
+
+    // Contenedor de íconos y texto en la parte inferior derecha
+    div(style="position: fixed; bottom: 20px; right: 20px; text-align: center; color: black; display: flex; flex-direction: column; align-items: center; z-index: 1000;")
+      // Ícono de GitHub
+      a(href="https://github.com/edulopezdev/TP_WEB2", target="_blank", style="margin-bottom: -5px; color: black; font-size: 24px;", title="Repositorio Eduardo López")
+        i.fab.fa-github
+
+      // Ícono de la API del Museo
+      a(href="https://metmuseum.github.io/", target="_blank", style="margin-top: 10px; color: black; font-size: 24px;", title="API de consulta")
+        i.fas.fa-university
 
     script(src="../js/script.js")
