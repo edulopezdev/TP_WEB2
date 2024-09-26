@@ -34,7 +34,7 @@ const mostrarAlerta = (titulo, texto, icono) => {
 selectDepartamentos();
 
 // ====================== Manejo de selección de departamento ======================
-let deptosSeleccion = "99";
+let deptosSeleccion = "";
 document.getElementById("department").addEventListener("change", (event) => {
     deptosSeleccion = event.target.value;
 });
@@ -50,18 +50,19 @@ function filtro() {
     let dpt = deptosSeleccion;
     let palabra = document.getElementById("search").value;
     let localizacion = localSeleccion;
+
     let url;
 
     //acá construyo la URL según las selecciones
-    if (dpt != 99 && palabra && localizacion) {
+    if (dpt != "" && palabra && localizacion) {
         url = `https://collectionapi.metmuseum.org/public/collection/v1/search?geoLocation=${localizacion}&q=${palabra}&DepartmentId=${dpt}`;
-    } else if (dpt != 99 && localizacion) {
+    } else if (dpt != "" && localizacion) {
         url = `https://collectionapi.metmuseum.org/public/collection/v1/search?geoLocation=${localizacion}&q=*&DepartmentId=${dpt}`;
-    } else if (dpt != 99 && palabra) {
+    } else if (dpt != "" && palabra) {
         url = `https://collectionapi.metmuseum.org/public/collection/v1/search?q=${palabra}&DepartmentId=${dpt}`;
     } else if (localizacion && palabra) {
         url = `https://collectionapi.metmuseum.org/public/collection/v1/search?geoLocation=${localizacion}&q=${palabra}`;
-    } else if (dpt != 99) {
+    } else if (dpt != "") {
         url = `https://collectionapi.metmuseum.org/public/collection/v1/search?q=*&DepartmentId=${dpt}`;
     } else if (localizacion) {
         url = `https://collectionapi.metmuseum.org/public/collection/v1/search?geoLocation=${localizacion}&q=*`;
@@ -69,7 +70,7 @@ function filtro() {
         url = `https://collectionapi.metmuseum.org/public/collection/v1/search?q=${palabra}`;
     }
 
-    return url; //devuelvo la URL construida
+    return url; 
 }
 
 // ====================== Función para validar objetos ======================
@@ -95,14 +96,14 @@ async function buscar(paginaActual = 1) {
     const localizacionSelect = document.getElementById("location");
     const busquedaInput = document.getElementById("search");
 
-    //aca remuevo clases de error antes de validar
-    departamentoSelect.classList.remove("error", "red-bg");
-    localizacionSelect.classList.remove("error", "red-bg");
-    busquedaInput.classList.remove("error", "red-bg");
-
+    if(busquedaInput.value == '*'){
+        swal("Aviso", "No esta permitido ingresar ese caracter.", "warning");
+        busquedaInput.value = '';
+        return;
+    }
     //vamos a validar si hay al menos un filtro seleccionado
     const ningunoSeleccionado = 
-        (deptosSeleccion === "99" || !deptosSeleccion) &&
+        (deptosSeleccion === "" || !deptosSeleccion) &&
         !localSeleccion &&
         !busquedaInput.value;
 
@@ -113,6 +114,7 @@ async function buscar(paginaActual = 1) {
         return;
     }    
   document.querySelector(".loader").style.display = "flex";
+  
   let url = filtro();
 
   try {
