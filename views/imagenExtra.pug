@@ -5,26 +5,27 @@ html(lang="es")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Detalles de la Obra
     link(rel="stylesheet", href="/css/imagenExtra.css")
-    // Asegúrate de enlazar tu CSS
   body
     header
       h1 Detalles de la Obra
       h2= objeto.title || 'Sin título'
     
-    if objeto.primaryImage
-      img(src=objeto.primaryImage, alt=objeto.title, class="imagen-extra")
-    else
-      img(src="/images/sin_imagen.png", alt="Sin imagen disponible", class="imagen-extra")
+    // Contenedor para centrar imagen y información
+    .container-imagen-extra
+      if objeto.primaryImageSmall
+        img(src=objeto.primaryImageSmall, alt=objeto.title, class="imagen-extra")
+      else
+        img(src="/images/sin_imagen.png", alt="Sin imagen disponible", class="imagen-extra")
       
-    p
-      strong Dinastía: 
-      = objeto.dynasty || 'No disponible'
-    p
-      strong Cultura: 
-      = objeto.culture || 'No disponible'
-    p
-      strong Fecha de creación: 
-      = objeto.objectDate || 'No disponible'
+      p
+        strong Dinastía: 
+        = objeto.dynasty || 'No disponible'
+      p
+        strong Cultura: 
+        = objeto.culture || 'No disponible'
+      p
+        strong Fecha de creación: 
+        = objeto.objectDate || 'No disponible'
       
     // Más información o imágenes adicionales
     if objeto.additionalImages && objeto.additionalImages.length > 0

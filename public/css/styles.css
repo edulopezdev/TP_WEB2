@@ -1,4 +1,5 @@
 body {
+    padding: 100px 250px 40px;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 140px 250px 40px;
@@ -12,7 +13,7 @@ body {
 
 header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 header.fijo {
@@ -24,14 +25,17 @@ header.fijo {
     padding: 20px 50px;
     z-index: 1000;
     box-shadow: none;
+    height: 450px;
 }
 
 h1 {
+    font-family: 'Metamorphous', serif;
     text-align: center;
-    color: #333;
+    color: #ffffff;
     margin-top: 10px;
     margin-bottom: 10px;
     line-height: 1.5;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 h2 {
@@ -59,12 +63,21 @@ p {
     padding: 15px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
+    margin-top: 10px;
     max-width: 800px;
     width: auto;
     margin: 0 auto;
     display: inline-flex;
     flex-wrap: wrap;
     justify-content: center;
+}
+
+.filtro-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 150px;
+    font-size: 12px;
 }
 
 .filtros {
@@ -88,23 +101,42 @@ select {
     right: 0;
     display: flex;
     justify-content: center;
-    padding: 30px 50px;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.3), rgba(255, 255, 255, 0));
+    align-items: center;
+    padding: 15px 50px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(220, 220, 220, 0));
+    border-radius: 15px;
     z-index: 1000;
+    height: 80px;
+}
+
+.botones-contenedor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+
+#paginaTexto {
+    color: white;
+    margin: 0 20px;
+    margin-top: 10px;
 }
 
 button {
+    width: 150px;
+    height: 40px;
     padding: 10px 15px;
-    background-color: #007bff;
+    background-color: #1eab91;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin-left: 10px;
+    margin-top: 10px;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #087139;
 }
 
 #gallery {
@@ -128,6 +160,18 @@ button:hover {
     background-color: rgba(255, 255, 255, 0.8);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.carta img {
+    width: 100%;
+    max-height: 250px;
+    max-width: 80%;
+    height: auto;
+    object-fit: cover;
+    margin-bottom: 10px;
 }
 
 .info-container {
@@ -140,7 +184,7 @@ button:hover {
     font-size: 0.9em;
     border: none;
     border-radius: 5px;
-    background-color: #007bff;
+    background-color: #8d8f8e;
     color: white;
     cursor: pointer;
     margin-top: 2px;
@@ -160,15 +204,6 @@ button:hover {
     margin-bottom: 15px;
 }
 
-.carta img {
-    width: 80%;
-    height: auto;
-    max-height: 200px;
-    object-fit: cover;
-    margin-bottom: 10px;
-    margin: 0 auto;
-}
-
 .carta-title {
     font-weight: bold;
     margin: 10px 0;
@@ -184,7 +219,7 @@ button:hover {
 }
 
 .ver-imagenes-btn:hover {
-    background-color: #0056b3;
+    background-color: #087139;
 }
 
 .loader {
@@ -203,7 +238,7 @@ button:hover {
 .loader:before {
     content: '';
     border: 8px solid #f3f3f3;
-    border-top: 8px solid #3498db;
+    border-top: 8px solid #1eab91;
     border-radius: 50%;
     width: 50px;
     height: 50px;
@@ -213,4 +248,24 @@ button:hover {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+.red-bg {
+    background-color: rgba(255, 0, 0, 0.3);
+}
+
+.error {
+    border: 2px solid red;
+}
+
+@keyframes vibrate {
+    0% { transform: translate(0); }
+    25% { transform: translate(-2px, 0); }
+    50% { transform: translate(2px, 0); }
+    75% { transform: translate(-2px, 0); }
+    100% { transform: translate(0); }
+}
+
+.vibrar {
+    animation: vibrate 0.3s ease;
 }

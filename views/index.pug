@@ -4,31 +4,48 @@ html(lang="es")
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Museo Metropolitano de NY
-    link(rel="stylesheet", href="../css/styles.css") 
+    link(rel="stylesheet", href="../css/styles.css")
+    link(href="https://fonts.googleapis.com/css2?family=Metamorphous&display=swap", rel="stylesheet")
+
+
   body
     header.fijo
-      h1 Galería de Arte del Museo Metropolitano de NY
+      h1 ¡Bienvenidos al museo met de NY!
       .filtros-contenedor
         .filtros
-          input(type="text", id="search", placeholder="Buscar por palabra clave")
-          select(id="department", class="departamentos")
-          select(id="location", class="localizaciones")
-            option(value="", selected) Ninguna opción
-            option(value="China") China
-            option(value="Mexico") México
-            option(value="Guatemala") Guatemala
-            option(value="England") Inglaterra
-            option(value="Belgium") Bélgica
-            option(value="Spain") España
-            option(value="Canada") Canadá
-            option(value="France") Francia
-            option(value="Italy") Italia
-            option(value="Germany") Alemania
-            option(value="Japan") Japón
-            option(value="Venezuela") Venezuela
-            option(value="Netherlands") Países bajos
-            option(value="Denmark") Dinamarca
-            option(value="Czech Republic") República Checa
+          // Contenedor para el campo de búsqueda
+          .filtro-item
+            label(for="search", class="label-filtro") Buscar por palabra clave
+            input(type="text", id="search", placeholder="Ingrese palabra en inglés")
+          
+          // Contenedor para el departamento
+          .filtro-item
+            label(for="department", class="label-filtro") Buscar por departamento
+            select(id="department", class="departamentos")
+              option(value="", selected) Ninguna opción
+              // Agrega las opciones del departamento aquí
+
+          // Contenedor para la localización
+          .filtro-item
+            label(for="location", class="label-filtro") Buscar localización
+            select(id="location", class="localizaciones")
+              option(value="", selected) Ninguna opción
+              option(value="Japan") Japón
+              option(value="Belgium") Bélgica
+              option(value="Spain") España
+              option(value="Germany") Alemania
+              option(value="Mexico") México
+              option(value="Canada") Canadá
+              option(value="China") China
+              option(value="Italy") Italia
+              option(value="Venezuela") Venezuela
+              option(value="Czech Republic") República Checa
+              option(value="Guatemala") Guatemala
+              option(value="England") Inglaterra
+              option(value="Denmark") Dinamarca
+              option(value="Netherlands") Países bajos
+
+          
           button(class="btn", id="buscar", onclick="buscar()") Buscar
 
     // Loader
@@ -38,8 +55,10 @@ html(lang="es")
 
     // Navegación
     div.navegacion
-      button(id="btnAnterior", style="display: none", onclick="buscarAnterior()") Anterior
-      button(id="btnSiguiente", style="display: none", onclick="buscarSiguiente()") Siguiente
+      .botones-contenedor
+        button(id="btnAnterior", style="display: none", onclick="buscarAnterior()") Anterior
+        div#paginaTexto(style="display: none") Página 1 de 10 
+        button(id="btnSiguiente", style="display: none", onclick="buscarSiguiente()") Siguiente
 
     main(id="gallery")
       each objeto in objetos

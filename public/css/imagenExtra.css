@@ -1,16 +1,26 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 20px;
+    padding: 100px 250px 40px;
     background-color: #f4f4f4;
+    background-image: url('/images/museo_fondo.png');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 h1 {
     text-align: center;
     color: #333;
-    margin-top: 10px;
+    margin-top: 0;
     margin-bottom: 10px;
     line-height: 1.5;
+}
+
+h2, h3 {
+    text-align: center;
+    margin: 10px 0;
 }
 
 .container-imagenes {
@@ -21,7 +31,14 @@ h1 {
     margin-top: 20px;
 }
 
+.container-imagen-extra {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
 .imagen-extra {
+    width: 100%;
     max-width: 300px;
     height: auto;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -37,4 +54,19 @@ footer {
     text-align: center;
     margin-top: 30px;
     color: #666;
+}
+
+.ver-imagenes-btn {
+    padding: 5px;
+    font-size: 0.9em;
+    border-radius: 5px;
+    background-color: #909594;
+    color: white;
+    cursor: pointer;
+    margin-top: auto;
+    margin-bottom: 10px;
+    width: 100px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
